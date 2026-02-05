@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:15
+    container_name: gallery-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gallery
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - art-gallery-net
+
+  backend:
+    build: ./backend
+    container_name: gallery-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_USER: gallery
+      DATABASE_PASSWORD: gallery
+      DATABASE_HOST: db        
+      DATABASE_PORT: 5432
+      DATABASE_NAME: gallery
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/gallery
+    ports:
+      - "8080:8000"
+    networks:
+      - art-gallery-net
+
+  frontend:
+    build: ./frontend
+    container_name: gallery-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3080:80"
+    networks:
+      - art-gallery-net
+
+volumes:
+  postgres_data:
+
+networks:
+  art-gallery-net:
