@@ -34,15 +34,12 @@ Art Gallery е веб апликација за управување и прег
 
 ## 💻 Инсталација и подигање
 
-### 1. Клонирај репозиториум
-```bash
+**1. Клонирај репозиториум**
 git clone https://github.com/andonovasofija24/art-gallery.git
 cd art-gallery
 
-### **2. Подигање со Docker Compose (локално)**
-```bash
+**2. Подигање со Docker Compose (локално)**
 docker compose up --build
 
-### **3. Kubernetes Deployment**
-```bash
+**3. Kubernetes Deployment**
 kubectl apply -f k8s/
